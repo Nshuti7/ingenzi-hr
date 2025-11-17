@@ -1,0 +1,35 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<!--Background circle-->
+  <circle cx="100" cy="100" r="95" fill="#2563eb" opacity="0.1"/>
+<!--Main letter I with people silhouette integrated-->
+  <g id="main-logo">
+<!--Letter I stem-->
+    <rect x="85" y="60" width="8" height="80" fill="#2563eb" rx="4"/>
+<!--Top serif of I with person icon-->
+    <path d="M 75 60 L 105 60 L 105 68 L 75 68 Z" fill="#2563eb"/>
+<!--Human figure 1 (left)-->
+    <g transform="translate(50, 80)">
+      <circle cx="0" cy="0" r="8" fill="#10b981"/>
+      <path d="M -10 10 Q -10 5 0 8 Q 10 5 10 10 L 8 25 Q 0 22 -8 25 Z" fill="#10b981"/>
+    </g>
+<!--Human figure 2 (center)-->
+    <g transform="translate(89, 70)">
+      <circle cx="0" cy="0" r="9" fill="#2563eb"/>
+      <path d="M -11 11 Q -11 6 0 9 Q 11 6 11 11 L 9 28 Q 0 25 -9 28 Z" fill="#2563eb"/>
+    </g>
+<!--Human figure 3 (right)-->
+    <g transform="translate(128, 80)">
+      <circle cx="0" cy="0" r="8" fill="#8b5cf6"/>
+      <path d="M -10 10 Q -10 5 0 8 Q 10 5 10 10 L 8 25 Q 0 22 -8 25 Z" fill="#8b5cf6"/>
+    </g>
+<!--Bottom serif of I-->
+    <path d="M 75 140 L 105 140 L 105 148 L 75 148 Z" fill="#2563eb"/>
+<!--Connection lines representing network/teamwork-->
+    <line x1="58" y1="95" x2="78" y2="95" stroke="#10b981" stroke-width="2" opacity="0.6"/>
+    <line x1="100" y1="95" x2="120" y2="95" stroke="#8b5cf6" stroke-width="2" opacity="0.6"/>
+    <line x1="58" y1="95" x2="89" y2="85" stroke="#10b981" stroke-width="2" opacity="0.4"/>
+    <line x1="128" y1="95" x2="89" y2="85" stroke="#8b5cf6" stroke-width="2" opacity="0.4"/>
+  </g>
+<!--Text "INGENZI" below-->
+  <text x="100" y="170" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#1e293b" text-anchor="middle">INGENZI</text>
+</svg>
