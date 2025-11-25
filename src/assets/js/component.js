@@ -285,7 +285,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const modals = document.querySelectorAll('.modal');
   modals.forEach(modal => {
     modal.addEventListener('click', event => {
-      if (!document.querySelector('.modal.show .modal-content').contains(event.target)) {
+      const activeModalContent = document.querySelector('.modal.show .modal-content');
+      if (!activeModalContent) {
+        return;
+      }
+      if (!activeModalContent.contains(event.target)) {
         modalclose();
       }
     });
