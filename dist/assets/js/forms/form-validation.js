@@ -29,8 +29,8 @@
 
   document.addEventListener(
     'bouncerFormValid',
-    function () {
-      alert('Form submitted successfully!');
+    async function () {
+      await showAlert('Form submitted successfully!', 'Success', 'success');
       window.location.reload();
     },
     false

@@ -67,11 +67,12 @@
           </a>
         </li>
 
-        <li class="pc-item pc-caption">
+        <!-- HR Management Section (HR Managers Only) -->
+        <li class="pc-item pc-caption" data-role="hr_manager">
           <label>HR Management</label>
         </li>
 
-        <li class="pc-item pc-hasmenu">
+        <li class="pc-item pc-hasmenu" data-role="hr_manager">
           <a href="#!" class="pc-link">
             <span class="pc-micon">
               <i data-feather="users"></i>
@@ -92,7 +93,7 @@
           </ul>
         </li>
 
-        <li class="pc-item">
+        <li class="pc-item" data-role="hr_manager">
           <a href="../hrms/attendance.html" class="pc-link">
             <span class="pc-micon">
               <i data-feather="clock"></i>
@@ -101,7 +102,7 @@
           </a>
         </li>
 
-        <li class="pc-item pc-hasmenu">
+        <li class="pc-item pc-hasmenu" data-role="hr_manager employee">
           <a href="#!" class="pc-link">
             <span class="pc-micon">
               <i data-feather="calendar"></i>
@@ -110,14 +111,17 @@
             <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
           </a>
           <ul class="pc-submenu">
-            <li class="pc-item">
+            <li class="pc-item" data-role="hr_manager">
               <a href="../hrms/leave.html" class="pc-link">Leave Requests</a>
             </li>
-            <li class="pc-item">
+            <li class="pc-item" data-role="employee">
               <a href="../hrms/leave.html#apply" class="pc-link">Apply for Leave</a>
             </li>
-            <li class="pc-item">
+            <li class="pc-item" data-role="hr_manager employee">
               <a href="../hrms/leave.html#history" class="pc-link">Leave History</a>
+            </li>
+            <li class="pc-item" data-role="hr_manager">
+              <a href="../hrms/leave-types.html" class="pc-link">Leave Types</a>
             </li>
           </ul>
         </li>
@@ -131,7 +135,7 @@
           </a>
         </li>
 
-        <li class="pc-item">
+        <li class="pc-item" data-role="hr_manager">
           <a href="../hrms/recruitment.html" class="pc-link">
             <span class="pc-micon">
               <i data-feather="user-plus"></i>
@@ -140,17 +144,9 @@
           </a>
         </li>
 
-        <li class="pc-item pc-caption">
-          <label>Reports & Settings</label>
-        </li>
-
-        <li class="pc-item">
-          <a href="../hrms/reports.html" class="pc-link">
-            <span class="pc-micon">
-              <i data-feather="file-text"></i>
-            </span>
-            <span class="pc-mtext">Reports</span>
-          </a>
+        <!-- System Administration Section (Admins Only) -->
+        <li class="pc-item pc-caption" data-role="system_admin">
+          <label>System Administration</label>
         </li>
 
         <li class="pc-item pc-hasmenu" data-role="system_admin">
@@ -164,6 +160,12 @@
           <ul class="pc-submenu">
             <li class="pc-item">
               <a href="../hrms/users.html" class="pc-link">User Accounts</a>
+            </li>
+            <li class="pc-item">
+              <a href="../hrms/departments.html" class="pc-link">Departments</a>
+            </li>
+            <li class="pc-item">
+              <a href="../hrms/reports.html" class="pc-link">Reports</a>
             </li>
             <li class="pc-item">
               <a href="../hrms/backup.html" class="pc-link">Backup & Restore</a>
@@ -425,7 +427,8 @@
       </div>
     </li>
   </ul>
-</div></div>
+</div>
+</div>
 </header>
 <!-- [ Header ] end -->
 
@@ -450,17 +453,43 @@
 
         
         <div class="grid grid-cols-12 gap-x-6">
-          <div class="col-span-12">
+          <div class="col-span-12 md:col-span-6 lg:col-span-4">
             <div class="card">
-              <div class="card-body text-center py-20">
-                <div class="mb-6">
-                  <i class="feather icon-file-text text-secondary-500 text-[80px]"></i>
-                </div>
-                <h2 class="mb-4">Reports & Analytics</h2>
-                <p class="text-muted mb-6 text-lg">This feature is coming soon. We're working hard to bring you comprehensive reporting and analytics.</p>
-                <a href="../dashboard/index.html" class="btn btn-primary">
-                  <i class="feather icon-arrow-left me-2"></i>Back to Dashboard
-                </a>
+              <div class="card-body text-center">
+                <i class="feather icon-users text-primary-500 text-[48px] mb-3"></i>
+                <h5 class="mb-2">Employee Report</h5>
+                <p class="text-muted mb-3">Generate comprehensive employee reports</p>
+                <button class="btn btn-primary" data-report="employee">Generate</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-12 md:col-span-6 lg:col-span-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="feather icon-calendar text-success-500 text-[48px] mb-3"></i>
+                <h5 class="mb-2">Leave Report</h5>
+                <p class="text-muted mb-3">View leave statistics and trends</p>
+                <button class="btn btn-success" data-report="leave">Generate</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-12 md:col-span-6 lg:col-span-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="feather icon-dollar-sign text-warning-500 text-[48px] mb-3"></i>
+                <h5 class="mb-2">Payroll Report</h5>
+                <p class="text-muted mb-3">Financial and payroll summaries</p>
+                <button class="btn btn-warning" data-report="payroll">Generate</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-12 md:col-span-6 lg:col-span-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="feather icon-clock text-info-500 text-[48px] mb-3"></i>
+                <h5 class="mb-2">Attendance Report</h5>
+                <p class="text-muted mb-3">Attendance tracking and analysis</p>
+                <button class="btn btn-info" data-report="attendance">Generate</button>
               </div>
             </div>
           </div>
@@ -491,7 +520,13 @@
     <script src="../assets/js/component.js"></script>
     <script src="../assets/js/theme.js"></script>
     <script src="../assets/js/script.js"></script>
+    <!-- API Service - must be loaded before auth and other modules -->
+    <script src="../assets/js/api.js"></script>
+    <!-- Modal Service - must be loaded early for dialogs -->
+    <script src="../assets/js/modal.js"></script>
+    <!-- Auth must be loaded before role-based-ui -->
     <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/role-based-ui.js"></script>
 
     <div class="floting-button fixed bottom-[50px] right-[30px] z-[1030]">
     </div>
@@ -528,5 +563,7 @@
     </script>
     
 
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/reports.js"></script>
   </body>
 </html>

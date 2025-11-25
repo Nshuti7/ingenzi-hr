@@ -67,11 +67,12 @@
           </a>
         </li>
 
-        <li class="pc-item pc-caption">
+        <!-- HR Management Section (HR Managers Only) -->
+        <li class="pc-item pc-caption" data-role="hr_manager">
           <label>HR Management</label>
         </li>
 
-        <li class="pc-item pc-hasmenu">
+        <li class="pc-item pc-hasmenu" data-role="hr_manager">
           <a href="#!" class="pc-link">
             <span class="pc-micon">
               <i data-feather="users"></i>
@@ -92,7 +93,7 @@
           </ul>
         </li>
 
-        <li class="pc-item">
+        <li class="pc-item" data-role="hr_manager">
           <a href="../hrms/attendance.html" class="pc-link">
             <span class="pc-micon">
               <i data-feather="clock"></i>
@@ -101,7 +102,7 @@
           </a>
         </li>
 
-        <li class="pc-item pc-hasmenu">
+        <li class="pc-item pc-hasmenu" data-role="hr_manager employee">
           <a href="#!" class="pc-link">
             <span class="pc-micon">
               <i data-feather="calendar"></i>
@@ -110,14 +111,17 @@
             <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
           </a>
           <ul class="pc-submenu">
-            <li class="pc-item">
+            <li class="pc-item" data-role="hr_manager">
               <a href="../hrms/leave.html" class="pc-link">Leave Requests</a>
             </li>
-            <li class="pc-item">
+            <li class="pc-item" data-role="employee">
               <a href="../hrms/leave.html#apply" class="pc-link">Apply for Leave</a>
             </li>
-            <li class="pc-item">
+            <li class="pc-item" data-role="hr_manager employee">
               <a href="../hrms/leave.html#history" class="pc-link">Leave History</a>
+            </li>
+            <li class="pc-item" data-role="hr_manager">
+              <a href="../hrms/leave-types.html" class="pc-link">Leave Types</a>
             </li>
           </ul>
         </li>
@@ -131,7 +135,7 @@
           </a>
         </li>
 
-        <li class="pc-item">
+        <li class="pc-item" data-role="hr_manager">
           <a href="../hrms/recruitment.html" class="pc-link">
             <span class="pc-micon">
               <i data-feather="user-plus"></i>
@@ -140,17 +144,9 @@
           </a>
         </li>
 
-        <li class="pc-item pc-caption">
-          <label>Reports & Settings</label>
-        </li>
-
-        <li class="pc-item">
-          <a href="../hrms/reports.html" class="pc-link">
-            <span class="pc-micon">
-              <i data-feather="file-text"></i>
-            </span>
-            <span class="pc-mtext">Reports</span>
-          </a>
+        <!-- System Administration Section (Admins Only) -->
+        <li class="pc-item pc-caption" data-role="system_admin">
+          <label>System Administration</label>
         </li>
 
         <li class="pc-item pc-hasmenu" data-role="system_admin">
@@ -164,6 +160,12 @@
           <ul class="pc-submenu">
             <li class="pc-item">
               <a href="../hrms/users.html" class="pc-link">User Accounts</a>
+            </li>
+            <li class="pc-item">
+              <a href="../hrms/departments.html" class="pc-link">Departments</a>
+            </li>
+            <li class="pc-item">
+              <a href="../hrms/reports.html" class="pc-link">Reports</a>
             </li>
             <li class="pc-item">
               <a href="../hrms/backup.html" class="pc-link">Backup & Restore</a>
@@ -425,7 +427,8 @@
       </div>
     </li>
   </ul>
-</div></div>
+</div>
+</div>
 </header>
 <!-- [ Header ] end -->
 
@@ -452,21 +455,178 @@
         <div class="grid grid-cols-12 gap-x-6">
           <div class="col-span-12">
             <div class="card">
-              <div class="card-body text-center py-20">
-                <div class="mb-6">
-                  <i class="feather icon-users text-primary-500 text-[80px]"></i>
+              <div class="card-header flex items-center justify-between">
+                <h5>Employee Management</h5>
+                <button class="btn btn-primary" id="addEmployeeBtn">
+                  <i class="feather icon-plus me-2"></i>Add Employee
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Position</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="employeesTableBody">
+                      <!-- Employees will be loaded here -->
+                    </tbody>
+                  </table>
                 </div>
-                <h2 class="mb-4">Employee Management</h2>
-                <p class="text-muted mb-6 text-lg">This feature is coming soon. We're working hard to bring you the best employee management experience.</p>
-                <a href="../dashboard/index.html" class="btn btn-primary">
-                  <i class="feather icon-arrow-left me-2"></i>Back to Dashboard
-                </a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Employee Modal -->
+    <div id="employeeModal" class="modal" style="display: none;">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="employeeModalTitle">Add Employee</h5>
+            <button type="button" class="btn-close" id="closeEmployeeModal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="employeeForm">
+              <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Employee ID</label>
+                  <input type="text" class="form-control" id="employeeId" required readonly />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Status</label>
+                  <select class="form-control" id="status" required>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="terminated">Terminated</option>
+                  </select>
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-control" id="firstName" required />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="lastName" required />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" required />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Phone</label>
+                  <input type="tel" class="form-control" id="phone" />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Password <span class="text-muted">(Optional - to create login account)</span></label>
+                  <input type="password" class="form-control" id="password" placeholder="Leave empty to skip account creation" minlength="6" />
+                  <small class="text-muted">If provided, a user account will be created for this employee</small>
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Role <span class="text-muted">(If creating account)</span></label>
+                  <select class="form-control" id="role">
+                    <option value="employee">Employee</option>
+                    <option value="hr_manager">HR Manager</option>
+                    <option value="system_admin">System Admin</option>
+                  </select>
+                  <small class="text-muted">Only applies if password is provided</small>
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Department</label>
+                  <select class="form-control" id="departmentId" required>
+                    <option value="">Select Department</option>
+                  </select>
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Position</label>
+                  <input type="text" class="form-control" id="position" required />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Salary (RWF)</label>
+                  <input type="number" class="form-control" id="salary" step="0.01" required />
+                  <small class="text-muted">Enter salary in Rwandan Francs</small>
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Hire Date</label>
+                  <input type="date" class="form-control" id="hireDate" required />
+                </div>
+                <div class="col-span-12">
+                  <label class="form-label">Address</label>
+                  <textarea class="form-control" id="address" rows="2"></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="closeEmployeeModal">Cancel</button>
+            <button type="submit" form="employeeForm" class="btn btn-primary">Save Employee</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-dialog {
+        background: white;
+        border-radius: 8px;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .modal-content {
+        padding: 0;
+      }
+      .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal-body {
+        padding: 1.5rem;
+      }
+      .modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+      .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #6b7280;
+      }
+      .form-control-static {
+        padding: 0.5rem;
+        background: #f9fafb;
+        border-radius: 4px;
+      }
+    </style>
 
     <footer class="pc-footer">
       <div class="footer-wrapper container-fluid mx-10">
@@ -491,7 +651,13 @@
     <script src="../assets/js/component.js"></script>
     <script src="../assets/js/theme.js"></script>
     <script src="../assets/js/script.js"></script>
+    <!-- API Service - must be loaded before auth and other modules -->
+    <script src="../assets/js/api.js"></script>
+    <!-- Modal Service - must be loaded early for dialogs -->
+    <script src="../assets/js/modal.js"></script>
+    <!-- Auth must be loaded before role-based-ui -->
     <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/role-based-ui.js"></script>
 
     <div class="floting-button fixed bottom-[50px] right-[30px] z-[1030]">
     </div>
@@ -528,5 +694,7 @@
     </script>
     
 
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/employees.js"></script>
   </body>
 </html>

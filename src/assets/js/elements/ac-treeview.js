@@ -14,8 +14,8 @@
       },
       {
         label: 'Blah',
-        action: function (id) {
-          alert('Blah ' + id);
+        action: async function (id) {
+          await showAlert('Blah ' + id, 'Tree Action', 'info');
         }
       }
     ]

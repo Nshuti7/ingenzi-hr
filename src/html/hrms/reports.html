@@ -12,17 +12,43 @@
         @@include('../layouts/breadcrumb.html', {'breadcrumb-item': 'Reports', 'breadcrumb-item-active': 'HR Reports'})
         
         <div class="grid grid-cols-12 gap-x-6">
-          <div class="col-span-12">
+          <div class="col-span-12 md:col-span-6 lg:col-span-4">
             <div class="card">
-              <div class="card-body text-center py-20">
-                <div class="mb-6">
-                  <i class="feather icon-file-text text-secondary-500 text-[80px]"></i>
-                </div>
-                <h2 class="mb-4">Reports & Analytics</h2>
-                <p class="text-muted mb-6 text-lg">This feature is coming soon. We're working hard to bring you comprehensive reporting and analytics.</p>
-                <a href="../dashboard/index.html" class="btn btn-primary">
-                  <i class="feather icon-arrow-left me-2"></i>Back to Dashboard
-                </a>
+              <div class="card-body text-center">
+                <i class="feather icon-users text-primary-500 text-[48px] mb-3"></i>
+                <h5 class="mb-2">Employee Report</h5>
+                <p class="text-muted mb-3">Generate comprehensive employee reports</p>
+                <button class="btn btn-primary" data-report="employee">Generate</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-12 md:col-span-6 lg:col-span-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="feather icon-calendar text-success-500 text-[48px] mb-3"></i>
+                <h5 class="mb-2">Leave Report</h5>
+                <p class="text-muted mb-3">View leave statistics and trends</p>
+                <button class="btn btn-success" data-report="leave">Generate</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-12 md:col-span-6 lg:col-span-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="feather icon-dollar-sign text-warning-500 text-[48px] mb-3"></i>
+                <h5 class="mb-2">Payroll Report</h5>
+                <p class="text-muted mb-3">Financial and payroll summaries</p>
+                <button class="btn btn-warning" data-report="payroll">Generate</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-12 md:col-span-6 lg:col-span-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="feather icon-clock text-info-500 text-[48px] mb-3"></i>
+                <h5 class="mb-2">Attendance Report</h5>
+                <p class="text-muted mb-3">Attendance tracking and analysis</p>
+                <button class="btn btn-info" data-report="attendance">Generate</button>
               </div>
             </div>
           </div>
@@ -32,5 +58,7 @@
 
     @@include('../layouts/footer-block.html')
     @@include('../layouts/footer-js.html')
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/reports.js"></script>
   </body>
 </html>

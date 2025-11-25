@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Job - INGENZI HRMS</title>
+    @@include('../layouts/head-css.html')
+    <style>
+      body {
+        background-color: #f5f5f5;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
+      .apply-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+      }
+      .apply-container {
+        max-width: 900px;
+        width: 100%;
+      }
+      .logo-section {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .logo-section img {
+        max-height: 60px;
+      }
+      .card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+      }
+      .card-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .card-header h5 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+      .card-body {
+        padding: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="apply-wrapper">
+      <div class="apply-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+          <img src="../assets/images/widget/img-hrms.svg" alt="INGENZI HRMS" />
+          <h3 class="mt-3 mb-0">Job Application</h3>
+        </div>
+
+        <!-- Job Details Card -->
+        <div class="card" id="jobDetailsCard" style="display: none;">
+          <div class="card-header">
+            <h5 id="jobTitle">Loading...</h5>
+          </div>
+          <div class="card-body">
+            <div class="grid grid-cols-12 gap-4">
+              <div class="col-span-12 md:col-span-6">
+                <p class="mb-2"><strong>Department:</strong> <span id="jobDepartment">-</span></p>
+                <p class="mb-2"><strong>Opening Date:</strong> <span id="jobOpeningDate">-</span></p>
+              </div>
+              <div class="col-span-12 md:col-span-6">
+                <p class="mb-2"><strong>Closing Date:</strong> <span id="jobClosingDate">-</span></p>
+                <p class="mb-2"><strong>Status:</strong> <span id="jobStatus" class="badge bg-success-500">Open</span></p>
+              </div>
+              <div class="col-span-12" id="jobDescriptionSection" style="display: none;">
+                <hr class="my-3">
+                <h6 class="mb-2">Job Description</h6>
+                <p class="text-muted" id="jobDescription">-</p>
+              </div>
+              <div class="col-span-12" id="jobRequirementsSection" style="display: none;">
+                <h6 class="mb-2">Requirements</h6>
+                <p class="text-muted" id="jobRequirements">-</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Application Form Card -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Application Form</h5>
+          </div>
+          <div class="card-body">
+            <div id="loadingMessage" class="text-center py-8">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mt-3 text-muted">Loading job details...</p>
+            </div>
+
+            <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+            <div id="successMessage" class="alert alert-success" style="display: none;"></div>
+
+            <form id="applicationForm" style="display: none;">
+              <div class="grid grid-cols-12 gap-4 mb-4">
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">First Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="firstName" required />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="lastName" required />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-12 gap-4 mb-4">
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control" id="email" required />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" class="form-control" id="phone" />
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">Resume URL</label>
+                <input type="url" class="form-control" id="resume" placeholder="https://example.com/resume.pdf" />
+                <small class="text-muted">Link to your resume (Google Drive, Dropbox, etc.)</small>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">Cover Letter</label>
+                <textarea class="form-control" id="coverLetter" rows="6" placeholder="Tell us why you're interested in this position..."></textarea>
+              </div>
+
+              <div class="mb-4">
+                <div class="alert alert-info">
+                  <strong>Note:</strong> Fields marked with <span class="text-danger">*</span> are required.
+                </div>
+              </div>
+
+              <div class="flex gap-3">
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                  <span id="submitBtnText">Submit Application</span>
+                  <span id="submitBtnSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                </button>
+                <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Required CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
+    <!-- Required JS -->
+    <script src="../assets/js/plugins/simplebar.min.js"></script>
+    <script src="../assets/js/plugins/popper.min.js"></script>
+    <script src="../assets/js/icon/custom-icon.js"></script>
+    <script src="../assets/js/plugins/feather.min.js"></script>
+    <script src="../assets/js/component.js"></script>
+    <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/script.js"></script>
+    
+    <!-- API Service - no auth required for public endpoints -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/modal.js"></script>
+    
+    <script>
+      (function() {
+        'use strict';
+        
+        let jobId = null;
+        let jobData = null;
+
+        // Get job ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        jobId = urlParams.get('id');
+
+        if (!jobId) {
+          showError('No job ID provided. Please use a valid application link.');
+          return;
+        }
+
+        // Load job details
+        async function loadJobDetails() {
+          try {
+            const job = await window.API.getPublicJob(jobId);
+            jobData = job;
+            
+            if (!job) {
+              showError('Job vacancy not found or is no longer accepting applications.');
+              return;
+            }
+
+            // Check if job is still open
+            if (job.status !== 'open') {
+              showError('This job vacancy is no longer accepting applications.');
+              return;
+            }
+
+            // Check if closing date has passed
+            if (job.closingDate && new Date(job.closingDate) < new Date()) {
+              showError('The application deadline for this position has passed.');
+              return;
+            }
+
+            // Display job details
+            document.getElementById('jobTitle').textContent = job.title;
+            document.getElementById('jobDepartment').textContent = job.department ? job.department.name : 'N/A';
+            document.getElementById('jobOpeningDate').textContent = new Date(job.openingDate).toLocaleDateString();
+            document.getElementById('jobClosingDate').textContent = job.closingDate ? new Date(job.closingDate).toLocaleDateString() : 'N/A';
+            
+            if (job.description) {
+              document.getElementById('jobDescription').textContent = job.description;
+              document.getElementById('jobDescriptionSection').style.display = 'block';
+            }
+            
+            if (job.requirements) {
+              document.getElementById('jobRequirements').textContent = job.requirements;
+              document.getElementById('jobRequirementsSection').style.display = 'block';
+            }
+            
+            // Show job details card
+            document.getElementById('jobDetailsCard').style.display = 'block';
+            
+            // Show form
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('applicationForm').style.display = 'block';
+          } catch (error) {
+            console.error('Error loading job:', error);
+            showError(error.message || 'Failed to load job details. Please try again.');
+          }
+        }
+
+        function showError(message) {
+          document.getElementById('loadingMessage').style.display = 'none';
+          document.getElementById('applicationForm').style.display = 'none';
+          const errorDiv = document.getElementById('errorMessage');
+          errorDiv.textContent = message;
+          errorDiv.style.display = 'block';
+        }
+
+        function showSuccess(message) {
+          const successDiv = document.getElementById('successMessage');
+          successDiv.textContent = message;
+          successDiv.style.display = 'block';
+          document.getElementById('applicationForm').style.display = 'none';
+        }
+
+        // Handle form submission
+        const applicationForm = document.getElementById('applicationForm');
+        if (applicationForm) {
+          applicationForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const submitBtnText = document.getElementById('submitBtnText');
+            const submitBtnSpinner = document.getElementById('submitBtnSpinner');
+            
+            // Disable button and show spinner
+            submitBtn.disabled = true;
+            submitBtnText.textContent = 'Submitting...';
+            submitBtnSpinner.style.display = 'inline-block';
+
+            try {
+              const applicationData = {
+                jobVacancyId: parseInt(jobId),
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim() || null,
+                resume: document.getElementById('resume').value.trim() || null,
+                coverLetter: document.getElementById('coverLetter').value.trim() || null
+              };
+
+              const result = await window.API.submitApplication(applicationData);
+              
+              showSuccess(`Thank you! Your application for "${jobData.title}" has been submitted successfully. We will review your application and get back to you soon.`);
+              
+              // Clear form
+              document.getElementById('applicationForm').reset();
+            } catch (error) {
+              console.error('Error submitting application:', error);
+              await showAlert(
+                error.message || 'Failed to submit application. Please try again.',
+                'Application Error',
+                'error'
+              );
+            } finally {
+              // Re-enable button
+              submitBtn.disabled = false;
+              submitBtnText.textContent = 'Submit Application';
+              submitBtnSpinner.style.display = 'none';
+            }
+          });
+        }
+
+        // Load job details on page load
+        if (jobId) {
+          loadJobDetails();
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -61,7 +61,7 @@
             <div class="card sm:my-12  w-full shadow-none">
               <div class="card-body !p-10">
                 <div class="text-center mb-8">
-                  <a href="#"><img src="../assets/images/logo-dark.svg" alt="img" class="mx-auto auth-logo"/></a>
+                  <a href="#"><img src="../assets/images/widget/img-hrms.svg" alt="INGENZI HRMS" class="mx-auto auth-logo" style="max-width: 200px; height: auto;"/></a>
                 </div>
                 <h4 class="text-center font-medium mb-4">Login</h4>
                 <div id="loginError" class="alert alert-danger mb-3" style="display: none;"></div>
@@ -105,7 +105,13 @@
     <script src="../assets/js/component.js"></script>
     <script src="../assets/js/theme.js"></script>
     <script src="../assets/js/script.js"></script>
+    <!-- API Service - must be loaded before auth and other modules -->
+    <script src="../assets/js/api.js"></script>
+    <!-- Modal Service - must be loaded early for dialogs -->
+    <script src="../assets/js/modal.js"></script>
+    <!-- Auth must be loaded before role-based-ui -->
     <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/role-based-ui.js"></script>
 
     <div class="floting-button fixed bottom-[50px] right-[30px] z-[1030]">
     </div>

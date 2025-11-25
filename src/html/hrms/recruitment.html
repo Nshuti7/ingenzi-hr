@@ -14,15 +14,16 @@
         <div class="grid grid-cols-12 gap-x-6">
           <div class="col-span-12">
             <div class="card">
-              <div class="card-body text-center py-20">
-                <div class="mb-6">
-                  <i class="feather icon-user-plus text-danger-500 text-[80px]"></i>
+              <div class="card-header flex items-center justify-between">
+                <h5>Job Vacancies</h5>
+                <button class="btn btn-primary" id="addJobBtn">
+                  <i class="feather icon-plus me-2"></i>Post Job Vacancy
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="grid grid-cols-12 gap-4" id="jobsContainer">
+                  <!-- Job vacancies will be loaded here -->
                 </div>
-                <h2 class="mb-4">Recruitment</h2>
-                <p class="text-muted mb-6 text-lg">This feature is coming soon. We're working hard to bring you the best recruitment management experience.</p>
-                <a href="../dashboard/index.html" class="btn btn-primary">
-                  <i class="feather icon-arrow-left me-2"></i>Back to Dashboard
-                </a>
               </div>
             </div>
           </div>
@@ -30,7 +31,113 @@
       </div>
     </div>
 
+    <!-- Job Modal -->
+    <div id="jobModal" class="modal" style="display: none;">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="jobModalTitle">Post Job Vacancy</h5>
+            <button type="button" class="btn-close" id="closeJobModal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="jobForm">
+              <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Job Title</label>
+                  <input type="text" class="form-control" id="jobTitle" required />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Department</label>
+                  <select class="form-control" id="jobDepartmentId" required>
+                    <option value="">Select Department</option>
+                  </select>
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Opening Date</label>
+                  <input type="date" class="form-control" id="openingDate" required />
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                  <label class="form-label">Closing Date</label>
+                  <input type="date" class="form-control" id="closingDate" required />
+                </div>
+                <div class="col-span-12">
+                  <label class="form-label">Description</label>
+                  <textarea class="form-control" id="jobDescription" rows="4"></textarea>
+                </div>
+                <div class="col-span-12">
+                  <label class="form-label">Requirements</label>
+                  <textarea class="form-control" id="jobRequirements" rows="3"></textarea>
+                </div>
+                <div class="col-span-12">
+                  <label class="form-label">Status</label>
+                  <select class="form-control" id="jobStatus" required>
+                    <option value="open">Open</option>
+                    <option value="closed">Closed</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="closeJobModal">Cancel</button>
+            <button type="submit" form="jobForm" class="btn btn-primary">Save Job</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-dialog {
+        background: white;
+        border-radius: 8px;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .modal-content {
+        padding: 0;
+      }
+      .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal-body {
+        padding: 1.5rem;
+      }
+      .modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+      .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #6b7280;
+      }
+    </style>
+
     @@include('../layouts/footer-block.html')
     @@include('../layouts/footer-js.html')
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/recruitment.js"></script>
   </body>
 </html>

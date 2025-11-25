@@ -12,17 +12,29 @@
         @@include('../layouts/breadcrumb.html', {'breadcrumb-item': 'System Administration', 'breadcrumb-item-active': 'Backup & Restore'})
         
         <div class="grid grid-cols-12 gap-x-6">
-          <div class="col-span-12">
+          <div class="col-span-12 md:col-span-6">
             <div class="card">
-              <div class="card-body text-center py-20">
-                <div class="mb-6">
-                  <i class="feather icon-database text-success-500 text-[80px]"></i>
-                </div>
-                <h2 class="mb-4">Backup & Restore</h2>
-                <p class="text-muted mb-6 text-lg">This feature is coming soon. We're working hard to bring you secure backup and restore functionality.</p>
-                <a href="../dashboard/index.html" class="btn btn-primary">
-                  <i class="feather icon-arrow-left me-2"></i>Back to Dashboard
-                </a>
+              <div class="card-header">
+                <h5>System Backup</h5>
+              </div>
+              <div class="card-body">
+                <p class="mb-4">Create a backup of all system data and settings.</p>
+                <button class="btn btn-primary" id="backupBtn">
+                  <i class="feather icon-download me-2"></i>Create Backup
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-12 md:col-span-6">
+            <div class="card">
+              <div class="card-header">
+                <h5>Restore System</h5>
+              </div>
+              <div class="card-body">
+                <p class="mb-4">Restore system from a previous backup file.</p>
+                <button class="btn btn-success" id="restoreBtn">
+                  <i class="feather icon-upload me-2"></i>Restore Backup
+                </button>
               </div>
             </div>
           </div>
@@ -30,7 +42,85 @@
       </div>
     </div>
 
+    <!-- Restore Modal -->
+    <div id="restoreModal" class="modal" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Restore Backup</h5>
+            <button type="button" class="btn-close" onclick="closeRestoreModal()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="restoreForm">
+              <div class="mb-3">
+                <label class="form-label">Select Backup File</label>
+                <input type="file" class="form-control" id="backupFile" accept=".json" required />
+                <small class="text-muted">Select a previously exported backup file (.json)</small>
+              </div>
+              <div class="alert alert-warning">
+                <strong>Warning:</strong> Restoring will replace all current data. This action cannot be undone.
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeRestoreModal()">Cancel</button>
+            <button type="submit" form="restoreForm" class="btn btn-success">Restore Backup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-dialog {
+        background: white;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 90%;
+      }
+      .modal-content {
+        padding: 0;
+      }
+      .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal-body {
+        padding: 1.5rem;
+      }
+      .modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+      .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #6b7280;
+      }
+    </style>
+
     @@include('../layouts/footer-block.html')
     @@include('../layouts/footer-js.html')
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/backup.js"></script>
   </body>
 </html>

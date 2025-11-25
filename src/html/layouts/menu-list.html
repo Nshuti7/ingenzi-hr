@@ -10,11 +10,12 @@
   </a>
 </li>
 
-<li class="pc-item pc-caption">
+<!-- HR Management Section (HR Managers Only) -->
+<li class="pc-item pc-caption" data-role="hr_manager">
   <label>HR Management</label>
 </li>
 
-<li class="pc-item pc-hasmenu">
+<li class="pc-item pc-hasmenu" data-role="hr_manager">
   <a href="#!" class="pc-link">
     <span class="pc-micon">
       <i data-feather="users"></i>
@@ -35,7 +36,7 @@
   </ul>
 </li>
 
-<li class="pc-item">
+<li class="pc-item" data-role="hr_manager">
   <a href="../hrms/attendance.html" class="pc-link">
     <span class="pc-micon">
       <i data-feather="clock"></i>
@@ -44,7 +45,7 @@
   </a>
 </li>
 
-<li class="pc-item pc-hasmenu">
+<li class="pc-item pc-hasmenu" data-role="hr_manager employee">
   <a href="#!" class="pc-link">
     <span class="pc-micon">
       <i data-feather="calendar"></i>
@@ -53,14 +54,17 @@
     <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
   </a>
   <ul class="pc-submenu">
-    <li class="pc-item">
+    <li class="pc-item" data-role="hr_manager">
       <a href="../hrms/leave.html" class="pc-link">Leave Requests</a>
     </li>
-    <li class="pc-item">
+    <li class="pc-item" data-role="employee">
       <a href="../hrms/leave.html#apply" class="pc-link">Apply for Leave</a>
     </li>
-    <li class="pc-item">
+    <li class="pc-item" data-role="hr_manager employee">
       <a href="../hrms/leave.html#history" class="pc-link">Leave History</a>
+    </li>
+    <li class="pc-item" data-role="hr_manager">
+      <a href="../hrms/leave-types.html" class="pc-link">Leave Types</a>
     </li>
   </ul>
 </li>
@@ -74,7 +78,7 @@
   </a>
 </li>
 
-<li class="pc-item">
+<li class="pc-item" data-role="hr_manager">
   <a href="../hrms/recruitment.html" class="pc-link">
     <span class="pc-micon">
       <i data-feather="user-plus"></i>
@@ -83,17 +87,9 @@
   </a>
 </li>
 
-<li class="pc-item pc-caption">
-  <label>Reports & Settings</label>
-</li>
-
-<li class="pc-item">
-  <a href="../hrms/reports.html" class="pc-link">
-    <span class="pc-micon">
-      <i data-feather="file-text"></i>
-    </span>
-    <span class="pc-mtext">Reports</span>
-  </a>
+<!-- System Administration Section (Admins Only) -->
+<li class="pc-item pc-caption" data-role="system_admin">
+  <label>System Administration</label>
 </li>
 
 <li class="pc-item pc-hasmenu" data-role="system_admin">
@@ -107,6 +103,12 @@
   <ul class="pc-submenu">
     <li class="pc-item">
       <a href="../hrms/users.html" class="pc-link">User Accounts</a>
+    </li>
+    <li class="pc-item">
+      <a href="../hrms/departments.html" class="pc-link">Departments</a>
+    </li>
+    <li class="pc-item">
+      <a href="../hrms/reports.html" class="pc-link">Reports</a>
     </li>
     <li class="pc-item">
       <a href="../hrms/backup.html" class="pc-link">Backup & Restore</a>

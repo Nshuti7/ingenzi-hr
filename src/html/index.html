@@ -19,7 +19,7 @@
             <div class="card sm:my-12  w-full shadow-none">
               <div class="card-body !p-10">
                 <div class="text-center mb-8">
-                  <a href="#"><img src="assets/images/logo-dark.svg" alt="img" class="mx-auto auth-logo"/></a>
+                  <a href="#"><img src="assets/images/widget/img-hrms.svg" alt="INGENZI HRMS" class="mx-auto auth-logo" style="max-width: 200px; height: auto;"/></a>
                   <h3 class="mt-4 mb-0">INGENZI HRMS</h3>
                   <p class="text-muted">Human Resource Management System</p>
                 </div>
@@ -27,10 +27,12 @@
                 <div id="loginError" class="alert alert-danger mb-3" style="display: none;"></div>
                 <form id="loginForm">
                   <div class="mb-3">
-                    <input type="email" class="form-control" id="emailInput" placeholder="Email Address" required />
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="emailInput" placeholder="Enter your email" required autocomplete="email" />
                   </div>
                   <div class="mb-4">
-                    <input type="password" class="form-control" id="passwordInput" placeholder="Password" required />
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="passwordInput" placeholder="Enter your password" required autocomplete="current-password" />
                   </div>
                   <div class="flex mt-1 justify-between items-center flex-wrap">
                     <div class="form-check">
@@ -38,19 +40,16 @@
                       <label class="form-check-label text-muted" for="customCheckc1">Remember me?</label>
                     </div>
                     <h6 class="font-normal text-primary-500 mb-0">
-                      <a href="#"> Forgot Password? </a>
+                      <a href="#" id="forgotPasswordLink"> Forgot Password? </a>
                     </h6>
                   </div>
                   <div class="mt-4 text-center">
-                    <button type="submit" class="btn btn-primary mx-auto shadow-2xl w-full">Login</button>
+                    <button type="submit" class="btn btn-primary mx-auto shadow-2xl w-full" id="loginBtn">
+                      <span id="loginBtnText">Login</span>
+                      <span id="loginBtnSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;" role="status" aria-hidden="true"></span>
+                    </button>
                   </div>
                 </form>
-                <div class="mt-4 p-3 bg-theme-bodybg dark:bg-themedark-bodybg rounded">
-                  <p class="text-sm text-muted mb-2"><strong>Demo Credentials:</strong></p>
-                  <p class="text-xs text-muted mb-1">Employee: employee@ingenzi.com / employee123</p>
-                  <p class="text-xs text-muted mb-1">HR Manager: hr@ingenzi.com / hr123</p>
-                  <p class="text-xs text-muted">Admin: admin@ingenzi.com / admin123</p>
-                </div>
               </div>
             </div>
           </div>
@@ -67,22 +66,137 @@
     <script src="assets/js/component.js"></script>
     <script src="assets/js/theme.js"></script>
     <script src="assets/js/script.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/toast.js"></script>
     <script src="assets/js/auth.js"></script>
     <script>
-      document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.getElementById('emailInput').value;
-        const password = document.getElementById('passwordInput').value;
+      // Wait for DOM and scripts to be ready
+      document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
         const errorDiv = document.getElementById('loginError');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginBtnText = document.getElementById('loginBtnText');
+        const loginBtnSpinner = document.getElementById('loginBtnSpinner');
         
-        const result = login(email, password);
-        
-        if (result.success) {
-          // Redirect to dashboard
-          window.location.href = 'dashboard/index.html';
-        } else {
-          errorDiv.textContent = result.message || 'Invalid email or password';
-          errorDiv.style.display = 'block';
+        if (!loginForm) {
+          console.error('Login form not found');
+          return;
+        }
+
+        // Wait for API to be available
+        function waitForAPI(callback, maxAttempts = 50) {
+          let attempts = 0;
+          const checkAPI = setInterval(() => {
+            attempts++;
+            if (window.API && typeof login === 'function') {
+              clearInterval(checkAPI);
+              callback();
+            } else if (attempts >= maxAttempts) {
+              clearInterval(checkAPI);
+              errorDiv.textContent = 'Failed to load application. Please refresh the page.';
+              errorDiv.style.display = 'block';
+            }
+          }, 100);
+        }
+
+        waitForAPI(() => {
+          loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value;
+            
+            // Clear previous errors
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+            
+            // Validate inputs
+            if (!email) {
+              errorDiv.textContent = 'Please enter your email address';
+              errorDiv.style.display = 'block';
+              return;
+            }
+            
+            if (!password) {
+              errorDiv.textContent = 'Please enter your password';
+              errorDiv.style.display = 'block';
+              return;
+            }
+            
+            // Disable button and show loading
+            loginBtn.disabled = true;
+            loginBtnText.textContent = 'Logging in...';
+            loginBtnSpinner.style.display = 'inline-block';
+            
+            try {
+              const result = await login(email, password);
+              
+              if (result && result.success) {
+                // Show success message in toast
+                if (window.Toast) {
+                  window.Toast.success('Login successful! Redirecting...', 2000);
+                }
+                
+                // Show success message briefly in error div
+                errorDiv.className = 'alert alert-success mb-3';
+                errorDiv.textContent = 'Login successful! Redirecting...';
+                errorDiv.style.display = 'block';
+                
+                // Redirect to dashboard
+                setTimeout(() => {
+                  window.location.href = 'dashboard/index.html';
+                }, 500);
+              } else {
+                // Show error in both error div and toast
+                const errorMessage = result?.message || 'Invalid email or password. Please try again.';
+                errorDiv.className = 'alert alert-danger mb-3';
+                errorDiv.textContent = errorMessage;
+                errorDiv.style.display = 'block';
+                
+                // Show toast notification
+                if (window.Toast) {
+                  window.Toast.error(errorMessage);
+                }
+                
+                // Re-enable button
+                loginBtn.disabled = false;
+                loginBtnText.textContent = 'Login';
+                loginBtnSpinner.style.display = 'none';
+                
+                // Focus on email field
+                document.getElementById('emailInput').focus();
+              }
+            } catch (error) {
+              console.error('Login error:', error);
+              
+              // Show error message in both places
+              const errorMessage = error.message || 'An error occurred during login. Please check your connection and try again.';
+              errorDiv.className = 'alert alert-danger mb-3';
+              errorDiv.textContent = errorMessage;
+              errorDiv.style.display = 'block';
+              
+              // Show toast notification
+              if (window.Toast) {
+                window.Toast.error(errorMessage);
+              }
+              
+              // Re-enable button
+              loginBtn.disabled = false;
+              loginBtnText.textContent = 'Login';
+              loginBtnSpinner.style.display = 'none';
+            }
+          });
+        });
+
+        // Handle forgot password link
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        if (forgotPasswordLink) {
+          forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            errorDiv.className = 'alert alert-info mb-3';
+            errorDiv.textContent = 'Please contact your system administrator to reset your password.';
+            errorDiv.style.display = 'block';
+          });
         }
       });
     </script>

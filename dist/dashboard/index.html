@@ -72,11 +72,12 @@
           </a>
         </li>
 
-        <li class="pc-item pc-caption">
+        <!-- HR Management Section (HR Managers Only) -->
+        <li class="pc-item pc-caption" data-role="hr_manager">
           <label>HR Management</label>
         </li>
 
-        <li class="pc-item pc-hasmenu">
+        <li class="pc-item pc-hasmenu" data-role="hr_manager">
           <a href="#!" class="pc-link">
             <span class="pc-micon">
               <i data-feather="users"></i>
@@ -97,7 +98,7 @@
           </ul>
         </li>
 
-        <li class="pc-item">
+        <li class="pc-item" data-role="hr_manager">
           <a href="../hrms/attendance.html" class="pc-link">
             <span class="pc-micon">
               <i data-feather="clock"></i>
@@ -106,7 +107,7 @@
           </a>
         </li>
 
-        <li class="pc-item pc-hasmenu">
+        <li class="pc-item pc-hasmenu" data-role="hr_manager employee">
           <a href="#!" class="pc-link">
             <span class="pc-micon">
               <i data-feather="calendar"></i>
@@ -115,14 +116,17 @@
             <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
           </a>
           <ul class="pc-submenu">
-            <li class="pc-item">
+            <li class="pc-item" data-role="hr_manager">
               <a href="../hrms/leave.html" class="pc-link">Leave Requests</a>
             </li>
-            <li class="pc-item">
+            <li class="pc-item" data-role="employee">
               <a href="../hrms/leave.html#apply" class="pc-link">Apply for Leave</a>
             </li>
-            <li class="pc-item">
+            <li class="pc-item" data-role="hr_manager employee">
               <a href="../hrms/leave.html#history" class="pc-link">Leave History</a>
+            </li>
+            <li class="pc-item" data-role="hr_manager">
+              <a href="../hrms/leave-types.html" class="pc-link">Leave Types</a>
             </li>
           </ul>
         </li>
@@ -136,7 +140,7 @@
           </a>
         </li>
 
-        <li class="pc-item">
+        <li class="pc-item" data-role="hr_manager">
           <a href="../hrms/recruitment.html" class="pc-link">
             <span class="pc-micon">
               <i data-feather="user-plus"></i>
@@ -145,17 +149,9 @@
           </a>
         </li>
 
-        <li class="pc-item pc-caption">
-          <label>Reports & Settings</label>
-        </li>
-
-        <li class="pc-item">
-          <a href="../hrms/reports.html" class="pc-link">
-            <span class="pc-micon">
-              <i data-feather="file-text"></i>
-            </span>
-            <span class="pc-mtext">Reports</span>
-          </a>
+        <!-- System Administration Section (Admins Only) -->
+        <li class="pc-item pc-caption" data-role="system_admin">
+          <label>System Administration</label>
         </li>
 
         <li class="pc-item pc-hasmenu" data-role="system_admin">
@@ -169,6 +165,12 @@
           <ul class="pc-submenu">
             <li class="pc-item">
               <a href="../hrms/users.html" class="pc-link">User Accounts</a>
+            </li>
+            <li class="pc-item">
+              <a href="../hrms/departments.html" class="pc-link">Departments</a>
+            </li>
+            <li class="pc-item">
+              <a href="../hrms/reports.html" class="pc-link">Reports</a>
             </li>
             <li class="pc-item">
               <a href="../hrms/backup.html" class="pc-link">Backup & Restore</a>
@@ -430,7 +432,8 @@
       </div>
     </li>
   </ul>
-</div></div>
+</div>
+</div>
 </header>
 <!-- [ Header ] end -->
 
@@ -456,14 +459,15 @@
 
         <!-- [ Main Content ] start -->
         <div class="grid grid-cols-12 gap-x-6">
-          <!-- Welcome Card -->
-          <div class="col-span-12">
+          <!-- Welcome Card - Role Based -->
+          <!-- Employee Welcome -->
+          <div class="col-span-12" data-role="employee" data-strict-role="true">
             <div class="card">
               <div class="card-body">
                 <div class="flex items-center justify-between flex-wrap">
                   <div>
-                    <h3 class="mb-2">Welcome to INGENZI HRMS</h3>
-                    <p class="text-muted mb-0">Human Resource Management System Dashboard</p>
+                    <h3 class="mb-2" id="employeeWelcomeTitle">Welcome!</h3>
+                    <p class="text-muted mb-0" id="employeeWelcomeSubtitle">Your personal dashboard</p>
                   </div>
                   <div class="shrink-0">
                     <img src="../assets/images/widget/img-hrms.svg" alt="HRMS" class="w-24 h-24" />
@@ -473,16 +477,90 @@
             </div>
           </div>
 
-          <!-- Statistics Cards -->
-          <div class="col-span-12 xl:col-span-3 md:col-span-6">
+          <!-- HR Manager Welcome -->
+          <div class="col-span-12" data-role="hr_manager" data-strict-role="true">
+            <div class="card">
+              <div class="card-body">
+                <div class="flex items-center justify-between flex-wrap">
+                  <div>
+                    <h3 class="mb-2">Welcome to INGENZI HRMS</h3>
+                    <p class="text-muted mb-0">HR Management Dashboard</p>
+                  </div>
+                  <div class="shrink-0">
+                    <img src="../assets/images/widget/img-hrms.svg" alt="HRMS" class="w-24 h-24" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Admin Welcome -->
+          <div class="col-span-12" data-role="system_admin" data-strict-role="true">
+            <div class="card">
+              <div class="card-body">
+                <div class="flex items-center justify-between flex-wrap">
+                  <div>
+                    <h3 class="mb-2">Welcome to INGENZI HRMS</h3>
+                    <p class="text-muted mb-0">System Administration Dashboard</p>
+                  </div>
+                  <div class="shrink-0">
+                    <img src="../assets/images/widget/img-hrms.svg" alt="HRMS" class="w-24 h-24" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Statistics Cards - Role Based -->
+          <!-- Employee Stats (shown only to employees) -->
+          <div class="col-span-12 xl:col-span-3 md:col-span-6" data-role="employee">
+            <div class="card">
+              <div class="card-body">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h6 class="text-muted mb-2">My Pending Leaves</h6>
+                    <h3 class="mb-0" id="myPendingLeaves">0</h3>
+                    <p class="text-warning-500 mb-0 text-sm">
+                      <i class="feather icon-clock"></i> Awaiting approval
+                    </p>
+                  </div>
+                  <div class="shrink-0">
+                    <i class="feather icon-calendar text-warning-500 text-[48px]"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-12 xl:col-span-3 md:col-span-6" data-role="employee">
+            <div class="card">
+              <div class="card-body">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h6 class="text-muted mb-2">Total Leaves</h6>
+                    <h3 class="mb-0" id="myTotalLeaves">0</h3>
+                    <p class="text-info-500 mb-0 text-sm">
+                      <i class="feather icon-calendar"></i> All time
+                    </p>
+                  </div>
+                  <div class="shrink-0">
+                    <i class="feather icon-calendar text-info-500 text-[48px]"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- HR Manager Stats -->
+          <div class="col-span-12 xl:col-span-3 md:col-span-6" data-role="hr_manager system_admin">
             <div class="card">
               <div class="card-body">
                 <div class="flex items-center justify-between">
                   <div>
                     <h6 class="text-muted mb-2">Total Employees</h6>
-                    <h3 class="mb-0">245</h3>
+                    <h3 class="mb-0" id="totalEmployees">0</h3>
                     <p class="text-success-500 mb-0 text-sm">
-                      <i class="feather icon-arrow-up"></i> 12% increase
+                      <i class="feather icon-arrow-up"></i> Active
                     </p>
                   </div>
                   <div class="shrink-0">
@@ -493,13 +571,13 @@
             </div>
           </div>
 
-          <div class="col-span-12 xl:col-span-3 md:col-span-6">
+          <div class="col-span-12 xl:col-span-3 md:col-span-6" data-role="hr_manager system_admin">
             <div class="card">
               <div class="card-body">
                 <div class="flex items-center justify-between">
                   <div>
                     <h6 class="text-muted mb-2">Departments</h6>
-                    <h3 class="mb-0">12</h3>
+                    <h3 class="mb-0" id="totalDepartments">0</h3>
                     <p class="text-info-500 mb-0 text-sm">
                       <i class="feather icon-arrow-up"></i> Active
                     </p>
@@ -512,13 +590,13 @@
             </div>
           </div>
 
-          <div class="col-span-12 xl:col-span-3 md:col-span-6">
+          <div class="col-span-12 xl:col-span-3 md:col-span-6" data-role="hr_manager system_admin">
             <div class="card">
               <div class="card-body">
                 <div class="flex items-center justify-between">
                   <div>
                     <h6 class="text-muted mb-2">Pending Leaves</h6>
-                    <h3 class="mb-0">18</h3>
+                    <h3 class="mb-0" id="pendingLeaves">0</h3>
                     <p class="text-warning-500 mb-0 text-sm">
                       <i class="feather icon-clock"></i> Requires action
                     </p>
@@ -531,13 +609,33 @@
             </div>
           </div>
 
-          <div class="col-span-12 xl:col-span-3 md:col-span-6">
+          <div class="col-span-12 xl:col-span-3 md:col-span-6" data-role="hr_manager system_admin">
+            <div class="card">
+              <div class="card-body">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h6 class="text-muted mb-2">Today's Attendance</h6>
+                    <h3 class="mb-0" id="todayAttendance">0</h3>
+                    <p class="text-success-500 mb-0 text-sm">
+                      <i class="feather icon-check-circle"></i> Present
+                    </p>
+                  </div>
+                  <div class="shrink-0">
+                    <i class="feather icon-clock text-success-500 text-[48px]"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Only Stats -->
+          <div class="col-span-12 xl:col-span-3 md:col-span-6" data-role="system_admin">
             <div class="card">
               <div class="card-body">
                 <div class="flex items-center justify-between">
                   <div>
                     <h6 class="text-muted mb-2">Active Recruitments</h6>
-                    <h3 class="mb-0">8</h3>
+                    <h3 class="mb-0" id="activeRecruitments">0</h3>
                     <p class="text-success-500 mb-0 text-sm">
                       <i class="feather icon-check-circle"></i> Open positions
                     </p>
@@ -550,8 +648,65 @@
             </div>
           </div>
 
-          <!-- Quick Actions -->
-          <div class="col-span-12 xl:col-span-8">
+          <div class="col-span-12 xl:col-span-3 md:col-span-6" data-role="system_admin">
+            <div class="card">
+              <div class="card-body">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h6 class="text-muted mb-2">Total Users</h6>
+                    <h3 class="mb-0" id="totalUsers">0</h3>
+                    <p class="text-info-500 mb-0 text-sm">
+                      <i class="feather icon-users"></i> System users
+                    </p>
+                  </div>
+                  <div class="shrink-0">
+                    <i class="feather icon-user-check text-info-500 text-[48px]"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions - Role Based -->
+          <!-- Employee Quick Actions -->
+          <div class="col-span-12 xl:col-span-8" data-role="employee">
+            <div class="card">
+              <div class="card-header">
+                <h5>Quick Actions</h5>
+              </div>
+              <div class="card-body">
+                <div class="grid grid-cols-12 gap-4">
+                  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                    <a href="../hrms/leave.html" class="card hover:shadow-lg transition-shadow">
+                      <div class="card-body text-center">
+                        <i class="feather icon-calendar text-success-500 text-[32px] mb-2"></i>
+                        <h6 class="mb-0">Apply for Leave</h6>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                    <a href="../hrms/attendance.html" class="card hover:shadow-lg transition-shadow">
+                      <div class="card-body text-center">
+                        <i class="feather icon-clock text-info-500 text-[32px] mb-2"></i>
+                        <h6 class="mb-0">My Attendance</h6>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                    <a href="../hrms/payroll.html" class="card hover:shadow-lg transition-shadow">
+                      <div class="card-body text-center">
+                        <i class="feather icon-dollar-sign text-warning-500 text-[32px] mb-2"></i>
+                        <h6 class="mb-0">My Payslips</h6>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- HR Manager Quick Actions -->
+          <div class="col-span-12 xl:col-span-8" data-role="hr_manager">
             <div class="card">
               <div class="card-header">
                 <h5>Quick Actions</h5>
@@ -571,6 +726,14 @@
                       <div class="card-body text-center">
                         <i class="feather icon-calendar text-success-500 text-[32px] mb-2"></i>
                         <h6 class="mb-0">Leave Management</h6>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                    <a href="../hrms/leave-types.html" class="card hover:shadow-lg transition-shadow">
+                      <div class="card-body text-center">
+                        <i class="feather icon-settings text-info-500 text-[32px] mb-2"></i>
+                        <h6 class="mb-0">Leave Types</h6>
                       </div>
                     </a>
                   </div>
@@ -598,11 +761,56 @@
                       </div>
                     </a>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Admin Quick Actions (removed HR items) -->
+          <div class="col-span-12 xl:col-span-8" data-role="system_admin">
+            <div class="card">
+              <div class="card-header">
+                <h5>Quick Actions</h5>
+              </div>
+              <div class="card-body">
+                <div class="grid grid-cols-12 gap-4">
+                  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                    <a href="../hrms/users.html" class="card hover:shadow-lg transition-shadow">
+                      <div class="card-body text-center">
+                        <i class="feather icon-user-check text-primary-500 text-[32px] mb-2"></i>
+                        <h6 class="mb-0">User Management</h6>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                    <a href="../hrms/departments.html" class="card hover:shadow-lg transition-shadow">
+                      <div class="card-body text-center">
+                        <i class="feather icon-briefcase text-info-500 text-[32px] mb-2"></i>
+                        <h6 class="mb-0">Departments</h6>
+                      </div>
+                    </a>
+                  </div>
                   <div class="col-span-12 md:col-span-6 lg:col-span-4">
                     <a href="../hrms/reports.html" class="card hover:shadow-lg transition-shadow">
                       <div class="card-body text-center">
-                        <i class="feather icon-file-text text-secondary-500 text-[32px] mb-2"></i>
+                        <i class="feather icon-file-text text-success-500 text-[32px] mb-2"></i>
                         <h6 class="mb-0">Reports</h6>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                    <a href="../hrms/backup.html" class="card hover:shadow-lg transition-shadow">
+                      <div class="card-body text-center">
+                        <i class="feather icon-database text-warning-500 text-[32px] mb-2"></i>
+                        <h6 class="mb-0">Backup & Restore</h6>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                    <a href="../hrms/security.html" class="card hover:shadow-lg transition-shadow">
+                      <div class="card-body text-center">
+                        <i class="feather icon-shield text-danger-500 text-[32px] mb-2"></i>
+                        <h6 class="mb-0">Security Settings</h6>
                       </div>
                     </a>
                   </div>
@@ -611,6 +819,7 @@
             </div>
           </div>
 
+
           <!-- Recent Activity -->
           <div class="col-span-12 xl:col-span-4">
             <div class="card">
@@ -618,43 +827,8 @@
                 <h5>Recent Activity</h5>
               </div>
               <div class="card-body">
-                <div class="space-y-4">
-                  <div class="flex items-start gap-3">
-                    <div class="shrink-0">
-                      <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
-                        <i class="feather icon-user-plus text-primary-500"></i>
-                      </div>
-                    </div>
-                    <div class="grow">
-                      <h6 class="mb-1">New Employee Added</h6>
-                      <p class="text-muted text-sm mb-0">John Doe joined IT Department</p>
-                      <span class="text-xs text-muted">2 hours ago</span>
-                    </div>
-                  </div>
-                  <div class="flex items-start gap-3">
-                    <div class="shrink-0">
-                      <div class="w-10 h-10 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center">
-                        <i class="feather icon-check-circle text-success-500"></i>
-                      </div>
-                    </div>
-                    <div class="grow">
-                      <h6 class="mb-1">Leave Approved</h6>
-                      <p class="text-muted text-sm mb-0">Jane Smith's leave request approved</p>
-                      <span class="text-xs text-muted">5 hours ago</span>
-                    </div>
-                  </div>
-                  <div class="flex items-start gap-3">
-                    <div class="shrink-0">
-                      <div class="w-10 h-10 rounded-full bg-info-100 dark:bg-info-900 flex items-center justify-center">
-                        <i class="feather icon-briefcase text-info-500"></i>
-                      </div>
-                    </div>
-                    <div class="grow">
-                      <h6 class="mb-1">New Job Posted</h6>
-                      <p class="text-muted text-sm mb-0">Senior Developer position opened</p>
-                      <span class="text-xs text-muted">1 day ago</span>
-                    </div>
-                  </div>
+                <div class="space-y-4" id="recentActivity">
+                  <!-- Activity will be loaded here -->
                 </div>
               </div>
             </div>
@@ -687,7 +861,13 @@
     <script src="../assets/js/component.js"></script>
     <script src="../assets/js/theme.js"></script>
     <script src="../assets/js/script.js"></script>
+    <!-- API Service - must be loaded before auth and other modules -->
+    <script src="../assets/js/api.js"></script>
+    <!-- Modal Service - must be loaded early for dialogs -->
+    <script src="../assets/js/modal.js"></script>
+    <!-- Auth must be loaded before role-based-ui -->
     <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/role-based-ui.js"></script>
 
     <div class="floting-button fixed bottom-[50px] right-[30px] z-[1030]">
     </div>
@@ -724,6 +904,8 @@
     </script>
     
 
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/dashboard.js"></script>
   </body>
   <!-- [Body] end -->
 </html>

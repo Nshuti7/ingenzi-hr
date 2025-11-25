@@ -1,90 +1,165 @@
 /**
  * INGENZI HRMS - Authentication Module
- * Handles login, logout, and session management
+ * Handles login, logout, and session management using Backend API
  */
 
 // Check if user is authenticated
 function isAuthenticated() {
-  const user = localStorage.getItem('hrms_user');
-  const token = localStorage.getItem('hrms_token');
-  return user && token;
+  const token = localStorage.getItem('authToken');
+  return token !== null;
 }
 
-// Get current user
-function getCurrentUser() {
-  const user = localStorage.getItem('hrms_user');
-  return user ? JSON.parse(user) : null;
+// Get current user from localStorage or API
+async function getCurrentUser(suppressRedirect = false) {
+  // First check localStorage
+  const cachedUser = localStorage.getItem('currentUser');
+  if (cachedUser) {
+    try {
+      const user = JSON.parse(cachedUser);
+      // Return cached user immediately, then refresh in background if needed
+      if (isAuthenticated() && window.API && !suppressRedirect) {
+        // Try to refresh from API in background (non-blocking)
+        window.API.getCurrentUser().then(data => {
+          if (data && data.user) {
+            localStorage.setItem('currentUser', JSON.stringify(data.user));
+          }
+        }).catch(error => {
+          // If unauthorized, clear auth but don't redirect
+          if (error.message.includes('Unauthorized') || error.message.includes('401')) {
+            console.warn('Session expired, clearing auth data');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('authToken');
+            if (window.API) {
+              window.API.clearToken();
+            }
+          }
+        });
+      }
+      return user;
+    } catch (e) {
+      // Invalid JSON, clear it
+      localStorage.removeItem('currentUser');
+    }
+  }
+
+  // If no cached user but we have a token, fetch from API
+  if (isAuthenticated() && window.API) {
+    try {
+      const data = await window.API.getCurrentUser();
+      if (data.user) {
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
+        return data.user;
+      }
+    } catch (error) {
+      console.error('Failed to get current user:', error);
+      // If unauthorized, clear token but don't redirect (let requireAuth handle it)
+      if (error.message.includes('Unauthorized') || error.message.includes('401')) {
+        // Clear auth data
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('authToken');
+        if (window.API) {
+          window.API.clearToken();
+        }
+        // Only redirect if not suppressed and not already on login page
+        if (!suppressRedirect) {
+          const isLoginPage = window.location.pathname.includes('login') || 
+                              window.location.pathname.includes('index.html') && 
+                              !window.location.pathname.includes('dashboard');
+          if (!isLoginPage) {
+            // Let requireAuth handle the redirect on next page load
+            // Don't redirect here to avoid loops
+          }
+        }
+      }
+      // Return null instead of redirecting
+      return null;
+    }
+  }
+
+  return null;
 }
 
 // Get current user role
 function getCurrentUserRole() {
-  const user = getCurrentUser();
-  return user ? user.role : null;
+  const user = localStorage.getItem('currentUser');
+  if (user) {
+    try {
+      const userObj = JSON.parse(user);
+      return userObj.role;
+    } catch (e) {
+      return null;
+    }
+  }
+  return null;
 }
 
 // Login function
-function login(email, password) {
-  // Demo users for testing (in production, this would be an API call)
-  const users = {
-    'employee@ingenzi.com': {
-      id: 1,
-      email: 'employee@ingenzi.com',
-      password: 'employee123',
-      name: 'John Doe',
-      role: 'employee',
-      employeeId: 'EMP001'
-    },
-    'hr@ingenzi.com': {
-      id: 2,
-      email: 'hr@ingenzi.com',
-      password: 'hr123',
-      name: 'Jane Smith',
-      role: 'hr_manager',
-      employeeId: 'HR001'
-    },
-    'admin@ingenzi.com': {
-      id: 3,
-      email: 'admin@ingenzi.com',
-      password: 'admin123',
-      name: 'Admin User',
-      role: 'system_admin',
-      employeeId: 'ADM001'
+async function login(email, password) {
+  try {
+    if (!window.API) {
+      return {
+        success: false,
+        message: 'API service not loaded. Please refresh the page.'
+      };
     }
-  };
 
-  const user = users[email.toLowerCase()];
-  
-  if (user && user.password === password) {
-    // Create token (in production, this would come from the server)
-    const token = 'hrms_token_' + Date.now();
+    const data = await window.API.login(email, password);
     
-    // Store user and token
-    localStorage.setItem('hrms_user', JSON.stringify(user));
-    localStorage.setItem('hrms_token', token);
+    if (data.token && data.user) {
+      // Store user in localStorage
+      localStorage.setItem('currentUser', JSON.stringify(data.user));
+      
+      return {
+        success: true,
+        user: data.user,
+        token: data.token
+      };
+    }
     
     return {
-      success: true,
-      user: user
+      success: false,
+      message: data.error || 'Login failed'
+    };
+  } catch (error) {
+    console.error('Login error:', error);
+    return {
+      success: false,
+      message: error.message || 'Login failed. Please check your credentials.'
     };
   }
-  
-  return {
-    success: false,
-    message: 'Invalid email or password'
-  };
 }
 
 // Logout function
 function logout() {
-  localStorage.removeItem('hrms_user');
-  localStorage.removeItem('hrms_token');
-  window.location.href = '../pages/login.html';
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem('authToken');
+  if (window.API) {
+    window.API.clearToken();
+  }
+  // Use relative path to avoid issues
+  const loginPath = window.location.pathname.includes('pages/') 
+    ? '../pages/login.html' 
+    : 'pages/login.html';
+  window.location.href = loginPath;
 }
 
 // Protect routes - redirect to login if not authenticated
 function requireAuth() {
+  // Skip authentication for public pages
+  const publicPages = ['apply.html'];
+  const currentPage = window.location.pathname;
+  if (publicPages.some(page => currentPage.includes(page))) {
+    return true; // Allow access to public pages
+  }
+  
   if (!isAuthenticated()) {
-    window.location.href = '../pages/login.html';
+    // Use relative path to avoid issues
+    const loginPath = window.location.pathname.includes('dashboard/') || window.location.pathname.includes('hrms/')
+      ? '../pages/login.html'
+      : window.location.pathname.includes('pages/')
+      ? 'login.html'
+      : 'pages/login.html';
+    window.location.href = loginPath;
     return false;
   }
   return true;
@@ -107,36 +182,83 @@ function hasRole(requiredRole) {
   return userLevel >= requiredLevel;
 }
 
-// Initialize auth on page load
-document.addEventListener('DOMContentLoaded', function() {
+// Initialize auth on page load (skip for public pages)
+document.addEventListener('DOMContentLoaded', async function() {
+  // Skip auth initialization for public pages
+  const publicPages = ['apply.html'];
+  const currentPage = window.location.pathname;
+  if (publicPages.some(page => currentPage.includes(page))) {
+    return; // Don't run auth checks on public pages
+  }
+  // Wait a bit for API to be ready
+  if (typeof window.API === 'undefined') {
+    let retries = 0;
+    while (typeof window.API === 'undefined' && retries < 20) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      retries++;
+    }
+  }
+
   // If on login page, don't check auth
-  if (window.location.pathname.includes('login.html')) {
+  const isLoginPage = window.location.pathname.includes('login') || 
+                      window.location.pathname.includes('index.html') && 
+                      !window.location.pathname.includes('dashboard');
+  
+  if (isLoginPage) {
     // If already logged in, redirect to dashboard
     if (isAuthenticated()) {
-      window.location.href = '../dashboard/index.html';
+      // Use relative path
+      const dashboardPath = window.location.pathname.includes('pages/')
+        ? '../dashboard/index.html'
+        : 'dashboard/index.html';
+      // Small delay to prevent immediate redirect loop
+      setTimeout(() => {
+        window.location.href = dashboardPath;
+      }, 100);
     }
     return;
   }
   
   // Protect all other pages
-  requireAuth();
+  if (!requireAuth()) {
+    return;
+  }
   
-  // Update user profile in header if exists
-  const user = getCurrentUser();
-  if (user) {
-    // Update user name in header dropdown
-    const userNameEl = document.getElementById('userName');
-    if (userNameEl) userNameEl.textContent = user.name;
-    
-    const userEmailEl = document.getElementById('userEmail');
-    if (userEmailEl) userEmailEl.textContent = user.email;
-    
-    // Hide role-based menu items
-    const userRole = getCurrentUserRole();
-    if (userRole !== 'system_admin') {
-      const adminMenuItems = document.querySelectorAll('[data-role="system_admin"]');
-      adminMenuItems.forEach(item => item.style.display = 'none');
+  // Update user profile in header if exists (don't block page load if this fails)
+  try {
+    // First try to get cached user (fast)
+    const cachedUser = localStorage.getItem('currentUser');
+    if (cachedUser) {
+      try {
+        const user = JSON.parse(cachedUser);
+        const userNameEl = document.getElementById('userName');
+        if (userNameEl) userNameEl.textContent = user.name;
+        
+        const userEmailEl = document.getElementById('userEmail');
+        if (userEmailEl) userEmailEl.textContent = user.email;
+      } catch (e) {
+        console.warn('Failed to parse cached user:', e);
+      }
     }
+    
+    // Then try to refresh from API (async, non-blocking, suppress redirects)
+    if (window.API) {
+      getCurrentUser(true).then(user => {
+        if (user) {
+          const userNameEl = document.getElementById('userName');
+          if (userNameEl) userNameEl.textContent = user.name;
+          
+          const userEmailEl = document.getElementById('userEmail');
+          if (userEmailEl) userEmailEl.textContent = user.email;
+        }
+      }).catch(error => {
+        console.error('Error refreshing user from API:', error);
+        // Don't redirect on error - just log it
+      });
+    }
+  } catch (error) {
+    console.error('Error loading user:', error);
+    // Don't redirect on error - page should still load
   }
   
   // Add logout functionality to logout buttons
@@ -160,4 +282,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-

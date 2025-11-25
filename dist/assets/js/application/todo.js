@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelector('button#create-task').addEventListener('click', function () {
     var task = document.querySelector('input[name=task-insert]').value;
     if (task.length == 0) {
-      alert('please enter a task');
+      showAlert('please enter a task', 'Validation Error', 'warning');
     } else {
       var newTask = '<li class="[&.complete]:border-t-danger-500 [&.complete]:line-through [&.complete]:border-t-[9px]">' + '<p>' + task + '</p>' + '</li>';
       document.querySelector('#task-list').insertAdjacentHTML('beforeend', newTask);
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelector('#add-btn').addEventListener('click', function () {
     var task = document.querySelector('.add_task_todo').value;
     if (task == '') {
-      alert('please enter task');
+      showAlert('please enter task', 'Validation Error', 'warning');
     } else {
       i++;
       var add_todo =
@@ -102,7 +102,7 @@ var k = 4;
 document.querySelector('button.btn_save').addEventListener('click', function () {
   var task = document.querySelector('input[name=task-insert-modal]').value;
   if (task.length == 0) {
-    alert('please enter a task');
+    showAlert('please enter a task', 'Validation Error', 'warning');
   } else {
     k++;
     var add_todo =

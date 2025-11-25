@@ -14,15 +14,30 @@
         <div class="grid grid-cols-12 gap-x-6">
           <div class="col-span-12">
             <div class="card">
-              <div class="card-body text-center py-20">
-                <div class="mb-6">
-                  <i class="feather icon-users text-primary-500 text-[80px]"></i>
+              <div class="card-header flex items-center justify-between">
+                <h5>User Account Management</h5>
+                <button class="btn btn-primary" onclick="showAlert('Create user functionality - to be implemented', 'Information', 'info')">
+                  <i class="feather icon-plus me-2"></i>Create User Account
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Employee ID</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                      <!-- Users will be loaded here -->
+                    </tbody>
+                  </table>
                 </div>
-                <h2 class="mb-4">User Account Management</h2>
-                <p class="text-muted mb-6 text-lg">This feature is coming soon. We're working hard to bring you the best user management experience.</p>
-                <a href="../dashboard/index.html" class="btn btn-primary">
-                  <i class="feather icon-arrow-left me-2"></i>Back to Dashboard
-                </a>
               </div>
             </div>
           </div>
@@ -32,5 +47,7 @@
 
     @@include('../layouts/footer-block.html')
     @@include('../layouts/footer-js.html')
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/users.js"></script>
   </body>
 </html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" @@bodySetup>
+  <head>
+    @@include('../layouts/head-page-meta.html', {'title': 'Leave Types Management - INGENZI HRMS'})
+    @@include('../layouts/head-css.html')
+  </head>
+  <body>
+    @@include('../layouts/layout-vertical.html')
+
+    <div class="pc-container">
+      <div class="pc-content">
+        @@include('../layouts/breadcrumb.html', {'breadcrumb-item': 'HR Management', 'breadcrumb-item-active': 'Leave Types'})
+        
+        <div class="grid grid-cols-12 gap-x-6">
+          <div class="col-span-12">
+            <div class="card">
+              <div class="card-header flex items-center justify-between">
+                <h5>Leave Types Management</h5>
+                <button class="btn btn-primary" id="addLeaveTypeBtn">
+                  <i class="feather icon-plus me-2"></i>Add Leave Type
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Days</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="leaveTypesTableBody">
+                      <!-- Leave types will be loaded here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leave Type Modal -->
+    <div id="leaveTypeModal" class="modal" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="leaveTypeModalTitle">Add Leave Type</h5>
+            <button type="button" class="btn-close" id="closeLeaveTypeModal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="leaveTypeForm">
+              <div class="mb-3">
+                <label class="form-label">Leave Type Name</label>
+                <input type="text" class="form-control" id="leaveTypeName" placeholder="e.g., Annual Leave, Sick Leave" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Number of Days</label>
+                <input type="number" class="form-control" id="leaveTypeDays" min="1" required />
+                <small class="text-muted">Total number of days available for this leave type</small>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" id="leaveTypeDescription" rows="3" placeholder="Optional description"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="closeLeaveTypeModal">Cancel</button>
+            <button type="submit" form="leaveTypeForm" class="btn btn-primary">Save Leave Type</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-dialog {
+        background: white;
+        border-radius: 8px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .modal-content {
+        padding: 0;
+      }
+      .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal-body {
+        padding: 1.5rem;
+      }
+      .modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+      .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #6b7280;
+      }
+    </style>
+
+    @@include('../layouts/footer-block.html')
+    @@include('../layouts/footer-js.html')
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/toast.js"></script>
+    <script src="../assets/js/leave-types.js"></script>
+  </body>
+</html>
+
