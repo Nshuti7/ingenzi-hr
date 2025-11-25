@@ -132,6 +132,29 @@ if (typeof window.API === 'undefined') {
     return this.post('/auth/register', userData);
   }
 
+  // ============================================
+  // USERS (Admin only)
+  // ============================================
+  async getUsers() {
+    const data = await this.get('/users');
+    return data.users || [];
+  }
+
+  async getUser(id) {
+    const data = await this.get(`/users/${id}`);
+    return data.user;
+  }
+
+  async updateUser(id, userData) {
+    const data = await this.put(`/users/${id}`, userData);
+    return data.user;
+  }
+
+  async updateUserStatus(id, status) {
+    const data = await this.put(`/users/${id}/status`, { status });
+    return data;
+  }
+
   async getCurrentUser() {
     return this.get('/auth/me');
   }
