@@ -136,10 +136,21 @@ function logout() {
   if (window.API) {
     window.API.clearToken();
   }
-  // Use relative path to avoid issues
-  const loginPath = window.location.pathname.includes('pages/') 
-    ? '../pages/login.html' 
-    : 'pages/login.html';
+  // Determine correct path to login page
+  const currentPath = window.location.pathname;
+  let loginPath;
+  
+  if (currentPath.includes('/hrms/') || currentPath.includes('/dashboard/')) {
+    // If in hrms or dashboard folder, go up one level then to pages
+    loginPath = '../pages/login.html';
+  } else if (currentPath.includes('/pages/')) {
+    // If already in pages folder, just use login.html
+    loginPath = 'login.html';
+  } else {
+    // If at root or other location, go to pages/login.html
+    loginPath = 'pages/login.html';
+  }
+  
   window.location.href = loginPath;
 }
 
@@ -153,12 +164,21 @@ function requireAuth() {
   }
   
   if (!isAuthenticated()) {
-    // Use relative path to avoid issues
-    const loginPath = window.location.pathname.includes('dashboard/') || window.location.pathname.includes('hrms/')
-      ? '../pages/login.html'
-      : window.location.pathname.includes('pages/')
-      ? 'login.html'
-      : 'pages/login.html';
+    // Determine correct path to login page
+    const currentPath = window.location.pathname;
+    let loginPath;
+    
+    if (currentPath.includes('/hrms/') || currentPath.includes('/dashboard/')) {
+      // If in hrms or dashboard folder, go up one level then to pages
+      loginPath = '../pages/login.html';
+    } else if (currentPath.includes('/pages/')) {
+      // If already in pages folder, just use login.html
+      loginPath = 'login.html';
+    } else {
+      // If at root or other location, go to pages/login.html
+      loginPath = 'pages/login.html';
+    }
+    
     window.location.href = loginPath;
     return false;
   }
@@ -207,10 +227,18 @@ document.addEventListener('DOMContentLoaded', async function() {
   if (isLoginPage) {
     // If already logged in, redirect to dashboard
     if (isAuthenticated()) {
-      // Use relative path
-      const dashboardPath = window.location.pathname.includes('pages/')
-        ? '../dashboard/index.html'
-        : 'dashboard/index.html';
+      // Determine correct path to dashboard
+      const currentPath = window.location.pathname;
+      let dashboardPath;
+      
+      if (currentPath.includes('/pages/')) {
+        dashboardPath = '../dashboard/index.html';
+      } else if (currentPath.includes('/hrms/')) {
+        dashboardPath = '../dashboard/index.html';
+      } else {
+        dashboardPath = 'dashboard/index.html';
+      }
+      
       // Small delay to prevent immediate redirect loop
       setTimeout(() => {
         window.location.href = dashboardPath;

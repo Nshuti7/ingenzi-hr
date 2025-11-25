@@ -143,8 +143,9 @@ async function loadUsers() {
       const roleBadgeClass = user.role === 'system_admin' ? 'bg-danger-500' : 
                             user.role === 'hr_manager' ? 'bg-warning-500' : 'bg-info-500';
       const roleDisplay = user.role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
-      const employeeStatus = user.employee?.status || 'N/A';
-      const statusBadgeClass = employeeStatus === 'active' ? 'bg-success-500' : 'bg-danger-500';
+      const statusValue = (user.employee?.status || user.status || 'active').toLowerCase();
+      const statusLabel = statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
+      const statusBadgeClass = statusValue === 'active' ? 'bg-success-500' : 'bg-danger-500';
       
       return `
         <tr>
@@ -152,11 +153,11 @@ async function loadUsers() {
           <td>${user.email}</td>
           <td><span class="badge ${roleBadgeClass}">${roleDisplay}</span></td>
           <td>${user.employeeId || 'N/A'}</td>
-          <td><span class="badge ${statusBadgeClass}">${employeeStatus}</span></td>
+          <td><span class="badge ${statusBadgeClass}">${statusLabel}</span></td>
           <td>
             <button class="btn btn-sm btn-secondary" onclick="editUser(${user.id})">Edit</button>
-            <button class="btn btn-sm btn-danger" onclick="toggleUserStatus(${user.id}, '${employeeStatus}')">
-              ${employeeStatus === 'active' ? 'Deactivate' : 'Activate'}
+            <button class="btn btn-sm btn-danger" onclick="toggleUserStatus(${user.id}, '${statusValue}')">
+              ${statusValue === 'active' ? 'Deactivate' : 'Activate'}
             </button>
           </td>
         </tr>
@@ -207,7 +208,8 @@ async function editUser(id) {
 
 async function toggleUserStatus(id, currentStatus) {
   try {
-    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    const normalizedStatus = (currentStatus || '').toLowerCase();
+    const newStatus = normalizedStatus === 'active' ? 'inactive' : 'active';
     const confirmed = await showConfirm(
       `Are you sure you want to ${newStatus === 'inactive' ? 'deactivate' : 'activate'} this user?`,
       `${newStatus === 'inactive' ? 'Deactivate' : 'Activate'} User`,

@@ -101,13 +101,13 @@
 
         waitForAPI(() => {
           loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+          e.preventDefault();
             
             const email = document.getElementById('emailInput').value.trim();
-            const password = document.getElementById('passwordInput').value;
-            
+          const password = document.getElementById('passwordInput').value;
+          
             // Clear previous errors
-            errorDiv.style.display = 'none';
+          errorDiv.style.display = 'none';
             errorDiv.textContent = '';
             
             // Validate inputs
@@ -127,10 +127,10 @@
             loginBtn.disabled = true;
             loginBtnText.textContent = 'Logging in...';
             loginBtnSpinner.style.display = 'inline-block';
+          
+          try {
+            const result = await login(email, password);
             
-            try {
-              const result = await login(email, password);
-              
               if (result && result.success) {
                 // Show success message in toast
                 if (window.Toast) {
@@ -142,16 +142,16 @@
                 errorDiv.textContent = 'Login successful! Redirecting...';
                 errorDiv.style.display = 'block';
                 
-                // Redirect to dashboard
+              // Redirect to dashboard
                 setTimeout(() => {
-                  window.location.href = 'dashboard/index.html';
+              window.location.href = 'dashboard/index.html';
                 }, 500);
-              } else {
+            } else {
                 // Show error in both error div and toast
                 const errorMessage = result?.message || 'Invalid email or password. Please try again.';
                 errorDiv.className = 'alert alert-danger mb-3';
                 errorDiv.textContent = errorMessage;
-                errorDiv.style.display = 'block';
+              errorDiv.style.display = 'block';
                 
                 // Show toast notification
                 if (window.Toast) {
@@ -165,15 +165,15 @@
                 
                 // Focus on email field
                 document.getElementById('emailInput').focus();
-              }
-            } catch (error) {
+            }
+          } catch (error) {
               console.error('Login error:', error);
               
               // Show error message in both places
               const errorMessage = error.message || 'An error occurred during login. Please check your connection and try again.';
               errorDiv.className = 'alert alert-danger mb-3';
               errorDiv.textContent = errorMessage;
-              errorDiv.style.display = 'block';
+            errorDiv.style.display = 'block';
               
               // Show toast notification
               if (window.Toast) {
@@ -184,8 +184,8 @@
               loginBtn.disabled = false;
               loginBtnText.textContent = 'Login';
               loginBtnSpinner.style.display = 'none';
-            }
-          });
+          }
+        });
         });
 
         // Handle forgot password link

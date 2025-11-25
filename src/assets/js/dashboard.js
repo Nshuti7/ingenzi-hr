@@ -12,12 +12,12 @@ document.addEventListener('DOMContentLoaded', async function() {
       retries++;
     }
   }
-
+  
   if (typeof window.API === 'undefined') {
     console.error('API service not available');
     return;
   }
-
+  
   await personalizeWelcomeCard();
   await loadDashboardStats();
   await loadRecentActivity();
@@ -26,14 +26,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function personalizeWelcomeCard() {
   try {
-    const userRole = getCurrentUserRole();
-    
-    if (userRole === 'employee') {
+  const userRole = getCurrentUserRole();
+  
+  if (userRole === 'employee') {
       const currentUser = await window.API.getCurrentUser();
       if (currentUser && currentUser.user) {
         const welcomeTitle = document.getElementById('employeeWelcomeTitle');
         const welcomeSubtitle = document.getElementById('employeeWelcomeSubtitle');
-        
+    
         if (welcomeTitle) {
           const userName = currentUser.user.name || currentUser.user.email || 'Employee';
           welcomeTitle.textContent = `Welcome, ${userName}!`;
@@ -64,7 +64,7 @@ async function loadDashboardStats() {
     // Debug: Log stats to see what we're getting
     console.log('Dashboard stats received:', stats);
     console.log('User role:', userRole);
-
+      
     // Employee-specific stats
     if (userRole === 'employee') {
       if (stats.myPendingLeaves !== undefined) {
@@ -80,8 +80,8 @@ async function loadDashboardStats() {
       if (stats.myPayroll !== undefined) {
         const myPayrollEl = document.getElementById('myPayroll');
         if (myPayrollEl) myPayrollEl.textContent = stats.myPayroll || 0;
-      }
-    } else {
+    }
+  } else {
       // HR Manager and Admin stats
       if (stats.totalEmployees !== undefined) {
         const totalEmployeesEl = document.getElementById('totalEmployees');
@@ -108,7 +108,7 @@ async function loadDashboardStats() {
         if (stats.activeRecruitments !== undefined) {
           const activeRecruitmentsEl = document.getElementById('activeRecruitments');
           if (activeRecruitmentsEl) activeRecruitmentsEl.textContent = stats.activeRecruitments || 0;
-        }
+    }
 
         if (stats.totalUsers !== undefined) {
           const totalUsersEl = document.getElementById('totalUsers');
@@ -131,8 +131,8 @@ async function loadDashboardStats() {
 
 async function loadRecentActivity() {
   try {
-    const activityContainer = document.getElementById('recentActivity');
-    if (!activityContainer) return;
+  const activityContainer = document.getElementById('recentActivity');
+  if (!activityContainer) return;
 
     if (!window.API) {
       console.error('API not available');
@@ -143,8 +143,8 @@ async function loadRecentActivity() {
 
     if (!activities || activities.length === 0) {
       activityContainer.innerHTML = '<p class="text-muted">No recent activity</p>';
-      return;
-    }
+    return;
+  }
 
     const activityHTML = activities.map(activity => `
       <div class="d-flex align-items-center mb-3">
@@ -155,9 +155,9 @@ async function loadRecentActivity() {
           <h6 class="mb-0">${activity.title || 'Activity'}</h6>
           <p class="text-muted mb-0 small">${activity.description || ''}</p>
           <span class="text-muted small">${activity.time || ''}</span>
-        </div>
       </div>
-    `).join('');
+    </div>
+  `).join('');
 
     activityContainer.innerHTML = activityHTML;
   } catch (error) {
