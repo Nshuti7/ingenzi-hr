@@ -54,7 +54,7 @@ async function loadLeaveTypes() {
     }
 
     const userRole = getCurrentUserRole();
-    const canDelete = userRole === 'system_admin';
+    const canDelete = userRole === 'system_admin' || userRole === 'hr_manager';
 
     tbody.innerHTML = leaveTypes.map(lt => `
       <tr>
